@@ -36,5 +36,5 @@ jobs:
         spack repo add ./spack_recipes_meshing/meshing_repo
         spack repo add ./spack_recipes_meshing/supersede_repo
         spack external find cmake
-        spack install gmds
+        spack install --no-checksum gmds
 
