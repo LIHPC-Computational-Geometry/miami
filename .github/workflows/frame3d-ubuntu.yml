@@ -25,8 +25,8 @@ jobs:
 
     - name: GMDS Installation
       shell: bash
-      run : >-
-        python3 -m pip install gmsh
+      run : |
+        python3 -m pip install gmsh 
         git clone --depth=1 https://gitlab.com/franck.ledoux/mambo.git
         git clone --depth=1 https://github.com/LIHPC-Computational-Geometry/gmds.git
         git clone --depth=1 -b releases/latest https://github.com/spack/spack.git
