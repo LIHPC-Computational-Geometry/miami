@@ -1,0 +1,60 @@
+name: frame3d-ubuntu
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  Continuous:
+    name: frame3d-main-ubuntu
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Linux, Windows or Mac. 
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on:  ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2 # seems to be needed by codecov
+        submodules: recursive
+
+    - name: gmds dependencies installation
+      shell: bash
+      run : |
+        git clone --depth=1 https://github.com/LIHPC-Computational-Geometry/gmds.git
+        git clone --depth=1 -b releases/latest https://github.com/spack/spack.git
+        sed -i 's#"${ARCHITECTURE}/${COMPILERNAME}-${COMPILERVER}/${PACKAGE}-${VERSION}-${HASH}"#"${PACKAGE}"#g' spack/etc/spack/defaults/config.yaml
+        . ./spack/share/spack/setup-env.sh
+  
+        git clone --branch gmds_temp --depth=1 https://github.com/LIHPC-Computational-Geometry/spack_recipes_meshing.git
+
+        spack repo add ./spack_recipes_meshing/meshing_repo
+        spack repo add ./spack_recipes_meshing/supersede_repo
+        spack external find cmake
+        spack install --only dependencies gmds
+
+    - name: Install gmds Build Environment
+      # Use a bash shell so we can use the same syntax for environment variable
+      # access regardless of the host operating system
+      shell: bash
+      run: |
+        cmake -E make_directory ${{github.workspace}}/build
+        cd ${{github.workspace}}/build
+        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DGLPK_LIB=${{github.workspace}}/spack/opt/spack/glpk/lib -DGLPK_INC=${{github.workspace}}/spack/opt/spack/glpk/include -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
+        cmake --build . --config Release
+        cmake --install build --prefix ${{github.workspace}}/install --config Release
+
+    - name: mambo download (geom data)
+      shell: bash
+      run : |
+        git clone --depth=1 https://gitlab.com/franck.ledoux/mambo.git
+
+    - name: python modules installation
+      shell: bash
+      run : |
+        python3 -m pip install gmsh

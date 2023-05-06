@@ -9,7 +9,7 @@ on:
 
 jobs:
   Continuous:
-    name: toto
+    name: frame3d-official-spack
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Linux, Windows or Mac. 
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
@@ -23,11 +23,9 @@ jobs:
         fetch-depth: 2 # seems to be needed by codecov
         submodules: recursive
 
-    - name: GMDS Installation
+    - name: gmds installation
       shell: bash
       run : |
-        python3 -m pip install gmsh 
-        git clone --depth=1 https://gitlab.com/franck.ledoux/mambo.git
         git clone --depth=1 https://github.com/LIHPC-Computational-Geometry/gmds.git
         git clone --depth=1 -b releases/latest https://github.com/spack/spack.git
         sed -i 's#"${ARCHITECTURE}/${COMPILERNAME}-${COMPILERVER}/${PACKAGE}-${VERSION}-${HASH}"#"${PACKAGE}"#g' spack/etc/spack/defaults/config.yaml
@@ -38,3 +36,12 @@ jobs:
         spack external find cmake
         spack install --no-checksum gmds
 
+    - name: mambo download (geom data)
+      shell: bash
+      run : |
+        git clone --depth=1 https://gitlab.com/franck.ledoux/mambo.git
+
+    - name: python modules installation
+      shell: bash
+      run : |
+        python3 -m pip install gmsh
