@@ -43,11 +43,11 @@ jobs:
       # access regardless of the host operating system
       shell: bash
       run: |
-        cmake -E make_directory ${{github.workspace}}/build
-        cd ${{github.workspace}}/build
-        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DGLPK_LIB=${{github.workspace}}/spack/opt/spack/glpk/lib -DGLPK_INC=${{github.workspace}}/spack/opt/spack/glpk/include -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
+        cmake -E make_directory $GITHUB_WORKSPACE/build_gmds
+        cd $GITHUB_WORKSPACE/build_gmds
+        cmake $GITHUB_WORKSPACE/gmds -DCMAKE_BUILD_TYPE=Release -DGLPK_LIB=$GITHUB_WORKSPACE/spack/opt/spack/glpk/lib -DGLPK_INC=$GITHUB_WORKSPACE/spack/opt/spack/glpk/include -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
         cmake --build . --config Release
-        cmake --install build --prefix ${{github.workspace}}/install --config Release
+        cmake --install build --prefix $GITHUB_WORKSPACE/install --config Release
 
     - name: mambo download (geom data)
       shell: bash
