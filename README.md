@@ -3,9 +3,15 @@
 
 The purpose is to provide common tools, scripts, and CI recipes to continously evaluate meshing algorithms.
 
+<span style="color: red;">WARNING. This repository is under construction and not usable right now.</span>
+## Python scripts
 
-
+The directory ‘scripts’ contains python scripts, that can be used to 
+write *monitoring* pipelines:
+- The script [gen_tet_mesh.py](/scripts/gmsh_api.py) uses gmsh to generate a tetrahedral mesh from a step file. It can be used to convert step files available in [mambo](https://gitlab.com/franck.ledoux/mambo) into tetrahedral meshes that will be given to the faceted geometry manager of **gmds**.
 ## Frame 3D testing
+
+The frame3d testing pipeline is used in the 
 
 ### Proposed scenario
 The testing framework relies on [snakemake](https://snakemake.github.io/). We build a workflow, that performs the following stages:

@@ -45,7 +45,7 @@ jobs:
       run: |
         cmake -E make_directory $GITHUB_WORKSPACE/build_gmds
         cd $GITHUB_WORKSPACE/build_gmds
-        cmake $GITHUB_WORKSPACE/gmds -DCMAKE_BUILD_TYPE=Release -DGLPK_LIB=$GITHUB_WORKSPACE/spack/opt/spack/glpk/lib -DGLPK_INC=$GITHUB_WORKSPACE/spack/opt/spack/glpk/include -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
+        cmake $GITHUB_WORKSPACE/gmds -DENABLE_BLOCKING=OFF -DENABLE_CLAIRE=OFF -DENABLE_BLOCK_MESHER=OFF -DENABLE_PADDING=OFF -DENABLE_POLYBLOCK=OFF -DENABLE_GEOD_HONEY_COMB=OFF -DENABLE_SINGGRAPHBUILD=OFF -DCMAKE_BUILD_TYPE=Release -DGLPK_LIB=$GITHUB_WORKSPACE/spack/opt/spack/glpk/lib -DGLPK_INC=$GITHUB_WORKSPACE/spack/opt/spack/glpk/include -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
         cmake --build . --config Release
         cmake --install build --prefix $GITHUB_WORKSPACE/install --config Release
 
